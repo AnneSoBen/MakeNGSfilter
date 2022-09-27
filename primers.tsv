@@ -1,0 +1,8 @@
+"primers_name"	"target_taxon"	"fwd_p"	"rev_p"	"target_gene"	"reference"
+"Bact01"	"Bacteria"	"GGATTAGATACCCTGGTAGT"	"CACGACACGAGCTGACG"	"16S rDNA (V5-V6)"	"Fliegerova et al. (2014)"
+"Bact03"	"Bacteria"	"GTGYCAGCMGCCGCGGTAA"	"GGACTACNVGGGTWTCTAAT"	"16S rDNA (V4)"	"Baker et al. (2003), Quince et al. (2011), Apprill et al. (2015)"
+"Euka02"	"Eukaryota"	"TTTGTCTGSTTAATTSCG"	"CACAGACCTGTTATTGC"	"18S rDNA (V7)"	"Guardiola et al. (2015)"
+"Fung02"	"Fungi"	"GGAAGTAAAAGTCGTAACAAGG"	"CAAGAGATCCGTTGYTGAAAGTK"	"ITS1 nuclear rDNA"	"White et al. (1990), Taberlet et al. (2018)"
+"Inse01"	"Insecta"	"TRRGACGAGAAGACCCTATA"	"TCTTAATCCAACATCGAGGTC"	"16S mitochondrial rDNA"	"Clarke et al. (2014)"
+"Olig01"	"Oligochaeta"	"CAAGAAGACCCTATAGAGCTT"	"CCTGTTATCCCTAAGGTARCT"	"16S mitochondrial rDNA"	"Bienert et al. (2012), Taberlet et al. (2018)"
+"Sper01"	"Spermatophyta"	"GGGCAATCCTGAGCCAA"	"CCATTGAGTCTCTGCACCTATC"	"P6 loop of the trnL intron, chloroplast DNA"	"Taberlet et al. (2007)"

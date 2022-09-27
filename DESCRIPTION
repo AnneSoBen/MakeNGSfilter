@@ -1,0 +1,16 @@
+Package: MakeNGSfilter
+Title: Make NGSfilter files
+Version: 0.0.0.9000
+Authors@R: 
+    person("Anne-Sophie", "Benoiston", , "anne-sophie.benoiston@ird.fr", role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0001-9446-5703"))
+Description: A Shiny application that checks input files and produces NGSfilter files for the OBITools programs and the metabaR R package.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: shiny, shinydashboard, readxl, stringr
+Depends: 
+    R (>= 2.10)
+LazyData: true
