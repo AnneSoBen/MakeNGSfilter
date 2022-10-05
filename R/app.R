@@ -127,6 +127,7 @@ MakeNGSfilter <- function(){
                            br(),
                            br(),
                            htmlOutput("text5"),
+                           htmlOutput("text6"),
                            br(),
                            br(),
                            downloadButton("downloadData", "Download")
@@ -439,7 +440,7 @@ MakeNGSfilter <- function(){
         )
         
         if(e1 && e2 && e3){
-          HTML("Your files are consistent!  <i class='fa-solid fa-face-smile fa-bounce' style='--fa-animation-iteration-count: 3;'></i><br/>")
+          HTML("Your files are consistent!  <i class='fa-solid fa-face-smile fa-bounce' style='--fa-animation-iteration-count: 3;'></i><br/>You can now make your ngsfilter file.")
         }
         
       })
@@ -458,42 +459,52 @@ MakeNGSfilter <- function(){
       file3 <- input$tags
       
       output$text5 <- renderText({
+        e1 = comments_ok() & platedesign_ok() & tags_ok()
+        e2 = str_length(input$experiment_name) > 0
+        e3 = str_length(input$output_file_name) > 0
+        e4 = str_length(input$fwd_primer) > 0 & str_length(input$rev_primer) > 0
+        e5 = grepl("^[ACGTURYMKWSBDHVN]+$", input$fwd_primer)
+        e6 = grepl("^[ACGTURYMKWSBDHVN]+$", input$rev_primer)
+        
         # check whether all files are submitted and pass all checks
         validate(
-          need(comments_ok() & platedesign_ok() & tags_ok(), "All files must be uploaded and pass all checks (tab 'Check files').")
+          need(expr = e1,
+               message = "All files must be uploaded and pass all checks (tab 'Check files').")
         )
         
         # check whether an experiment name is given
         validate(
-          need(expr = str_length(input$experiment_name) > 0,
+          need(expr = e2,
                message = "Please type an experiment name.")
         )
         
         # check whether a file name is given
         validate(
-          need(expr = str_length(input$output_file_name) > 0,
+          need(expr = e3,
                message = "Please type a file name.")
         )
         
         
         # check whether primers are given
         validate(
-          need(expr = str_length(input$fwd_primer) > 0 & str_length(input$rev_primer) > 0,
+          need(expr = e4,
                message = "Please type the primers sequences.")
         )
         
         # check whether primers contain IUPAC symbols
         validate(
-          need(expr = grepl("^[ACGTURYMKWSBDHVN]+$", input$fwd_primer),
+          need(expr = e5,
                message = "The forward primer must contain nucleic IUPAC symbols.")
         )
         
         validate(
-          need(expr = grepl("^[ACGTURYMKWSBDHVN]+$", input$rev_primer),
+          need(expr = e6,
                message = "The reverse primer must contain nucleic IUPAC symbols.")
         )
         
-        
+        if(e1 && e2 && e3 && e4 && e5 && e6){
+          HTML("All mandatory fields are correctly filled in, now you can download your ngsfilter file!")
+        }
         
       })
       
@@ -591,6 +602,7 @@ MakeNGSfilter <- function(){
           
           comments = rbind(comments, unused_lines)
           comments$id = paste0(comments$id, toadd)
+          ID = comments$id
           
           comments_ngs = NULL
           for (i in 1:length(ID)){
