@@ -285,7 +285,7 @@ MakeNGSfilter <- function(){
         
         validate(
           need(expr = str_length(input$unused_well) > 0,
-               message = "Please enter the word designating unused wells")
+               message = "Please enter the word designating unused wells (enter any word if all wells are used)")
         )
         
         unused = input$unused_well
@@ -525,11 +525,19 @@ MakeNGSfilter <- function(){
           
           unused = input$unused_well
           
-          toadd = input$to_add
+          # if(input$to_add == ""){
+          #   print("bla")
+            toadd = input$to_add
+          # }
+          
           
           primerF = rep(input$fwd_primer, ncol(platedesign)*nrow(platedesign))
           primerR = rep(input$rev_primer, ncol(platedesign)*nrow(platedesign))
           Exp = rep(input$experiment_name, ncol(platedesign)*nrow(platedesign))
+          
+          # print(primerF)
+          # print(primerR)
+          # print(Exp)
           
           ID = unname(unlist(platedesign))
           
@@ -594,19 +602,35 @@ MakeNGSfilter <- function(){
           plcoro$position = paste(plcoro$plaque, "_", plcoro$col, plcoro$row, sep = "")
           
           id = ID[grep(unused, ID)]
-          unused_lines = comments[1:length(id),]
-          unused_lines[,1:ncol(unused_lines)] = NA
-          unused_lines$id = id
-          unused_lines$type = rep("control", length(id))
-          unused_lines$control_type = rep("sequencing", length(id))
+          if(length(id) > 0){
+            unused_lines = comments[1:length(id),]
+            unused_lines[,1:ncol(unused_lines)] = NA
+            unused_lines$id = id
+            unused_lines$type = rep("control", length(id))
+            unused_lines$control_type = rep("sequencing", length(id))
+            comments = rbind(comments, unused_lines)
+          }
           
-          comments = rbind(comments, unused_lines)
-          comments$id = paste0(comments$id, toadd)
-          ID = comments$id
+          # if(exists("toadd")){
+            ID = paste0(ID, toadd)
+          # }
+          
+          #ID = comments$id
           
           comments_ngs = NULL
           for (i in 1:length(ID)){
-            comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", substring(ID[i], 1, nchar(ID[i])-nchar(toadd)), ";", sep = ""))
+            if("sample_id" %in% colnames(comments)){
+              comments_ngs = c(comments_ngs, paste("id=", ID[i], ";", sep = ""))
+            }
+            else{
+              # if(exists("toadd")){
+                comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", substring(ID[i], 1, nchar(ID[i])-nchar(toadd)), ";", sep = ""))
+              # }
+              # else{
+              #   comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", ID[i], ";", sep = ""))
+              # }
+            }
+            
             for (j in 2:ncol(comments)){
               comments_ngs[i] = paste(comments_ngs[i], colnames(comments)[j], "=", comments[match(ID[i], comments[,1]), j], ";", sep="")
             }
@@ -623,8 +647,13 @@ MakeNGSfilter <- function(){
             }
           }
           
+          #print(primerF)
+          #print(primerR)
+          #print(unlist(tags))
+          
           ngsfilter.tab = c(Exp, ID, unlist(tags), primerF, primerR, paste0(rep("F @ ", length(ID)), comments_ngs))
           ngsfilter.tab = as.data.frame(matrix(ngsfilter.tab, nrow = length(ID), ncol = 6))
+          #print(head(ngsfilter.tab))
           
           write.table(ngsfilter.tab, file, sep = '\t', quote = F, row.names = F, col.names = F)
         }
