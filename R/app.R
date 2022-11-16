@@ -541,6 +541,7 @@ MakeNGSfilter <- function(){
           
           ID = unname(unlist(platedesign))
           
+          # number unused pcrs
           n = 1
           for(k in 1:length(ID)){
             if(ID[k] == unused){
@@ -632,7 +633,7 @@ MakeNGSfilter <- function(){
             }
             
             for (j in 2:ncol(comments)){
-              comments_ngs[i] = paste(comments_ngs[i], colnames(comments)[j], "=", comments[match(ID[i], comments[,1]), j], ";", sep="")
+              comments_ngs[i] = paste(comments_ngs[i], colnames(comments)[j], "=", subset(comments, id == substring(ID[i], 1, nchar(ID[i])-nchar(toadd)))[,j], ";", sep="")
             }
           }
           comments_ngs = sub(";control_type=NA", "", comments_ngs)
