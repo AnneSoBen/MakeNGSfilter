@@ -17,12 +17,12 @@ remotes::install_github("AnneSoBen/MakeNGSfilter")
 
 ### Dependencies
 
-`shiny`
-`shinydashboard`
-`readxl`
-`stats`
-`stringr`
-`utils`
+The `shiny`,
+`shinydashboard`,
+`readxl`,
+`stats`,
+`stringr` and 
+`utils` R packages.
 
 ## Usage
 
@@ -32,3 +32,10 @@ Type the following command to open the Shiny app:
 MakeNGSfilter::MakeNGSfilter()
 ```
 
+Three files are necessary:
+
+- a 'comments' file: a tab-separated table that lists all samples and controls and their characteristics;
+
+- a 'PCR plates design' file: a tab-separated file that represents the PCR plates design;
+
+- a 'tags plates design' file: a .xlsx files that represents the distribution of sample tags in the PCR plates context.
