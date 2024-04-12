@@ -28,9 +28,9 @@ MakeNGSfilter() # opens the shiny app in RStudio viewer or web navigator
 
 }
 \references{
-Boyer, F., Mercier, C., Bonin, A., Bras, Y. L., Taberlet, P., & Coissac, E. (2016). obitools : A unix-inspired software package for DNA metabarcoding. Molecular Ecology Resources, 16(1), 176‑182. https://doi.org/10.1111/1755-0998.12428
+Boyer, F., Mercier, C., Bonin, A., Bras, Y. L., Taberlet, P., & Coissac, E. (2016). obitools: A unix-inspired software package for DNA metabarcoding. Molecular Ecology Resources, 16(1), 176‑182. https://doi.org/10.1111/1755-0998.12428
 
-Zinger, L., Lionnet, C., Benoiston, A.-S., Donald, J., Mercier, C., & Boyer, F. (2021). metabaR : An r package for the evaluation and improvement of DNA metabarcoding data quality. Methods in Ecology and Evolution, 12(4), 586‑592. https://doi.org/10.1111/2041-210X.13552
+Zinger, L., Lionnet, C., Benoiston, A.-S., Donald, J., Mercier, C., & Boyer, F. (2021). metabaR: An r package for the evaluation and improvement of DNA metabarcoding data quality. Methods in Ecology and Evolution, 12(4), 586‑592. https://doi.org/10.1111/2041-210X.13552
 }
 \author{
 Anne-Sophie Benoiston

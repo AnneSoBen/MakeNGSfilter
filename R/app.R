@@ -18,8 +18,8 @@
 #' 
 #' @author Anne-Sophie Benoiston
 #' 
-#' @references Boyer, F., Mercier, C., Bonin, A., Bras, Y. L., Taberlet, P., & Coissac, E. (2016). obitools : A unix-inspired software package for DNA metabarcoding. Molecular Ecology Resources, 16(1), 176‑182. https://doi.org/10.1111/1755-0998.12428
-#' @references Zinger, L., Lionnet, C., Benoiston, A.-S., Donald, J., Mercier, C., & Boyer, F. (2021). metabaR : An r package for the evaluation and improvement of DNA metabarcoding data quality. Methods in Ecology and Evolution, 12(4), 586‑592. https://doi.org/10.1111/2041-210X.13552
+#' @references Boyer, F., Mercier, C., Bonin, A., Bras, Y. L., Taberlet, P., & Coissac, E. (2016). obitools: A unix-inspired software package for DNA metabarcoding. Molecular Ecology Resources, 16(1), 176‑182. https://doi.org/10.1111/1755-0998.12428
+#' @references Zinger, L., Lionnet, C., Benoiston, A.-S., Donald, J., Mercier, C., & Boyer, F. (2021). metabaR: An r package for the evaluation and improvement of DNA metabarcoding data quality. Methods in Ecology and Evolution, 12(4), 586‑592. https://doi.org/10.1111/2041-210X.13552
 #'
 #' @examples
 #' \donttest{
@@ -53,36 +53,38 @@ MakeNGSfilter <- function(){
           ## tab: how to ----
           tabItem(tabName = "how_to",
                   h2("What is the purpose of this Shiny app?"),
-                  p("This app was written in order to make it easier to create ngsfilter files used by the ", a(href = 'https://pythonhosted.org/OBITools/welcome.html', 'OBItools', .noWS = "outside"), " pipeline (Boyer et al. 2016) and the ", a(href = 'https://github.com/metabaRfactory/metabaR/', 'metabaR', .noWS = "outside"), " R package (Zinger et al. 2021).", .noWS = c("after-begin", "before-end")),
+                  p("This app was written in order to make it easier to create ngsfilter files used by the ", a(href = 'https://pythonhosted.org/OBITools/welcome.html', 'OBITools', .noWS = "outside"), " pipeline (Boyer et al. 2016) and the ", a(href = 'https://github.com/metabaRfactory/metabaR/', 'metabaR', .noWS = "outside"), " R package (Zinger et al. 2021).", .noWS = c("after-begin", "before-end")),
                   h2("How to use this app?"),
                   h3("Mandatory files"),
                   p("Three files are necessary to produce a ngsfilter file:"),
                   tags$div(tags$ul(
-                    tags$li("a 'comments' file: a tab-separated table that lists all samples and controls and their caracteristics;"),
-                    tags$li("a 'PCR plates design' file: a tab-separated file that represents the PCR plates design;"),
-                    tags$li("a 'tags plates design' file: a .xlsx files that represents the distribution of sample tags in the PCR plates context.")
+                    tags$li("a 'samples and controls description' file: a tab-separated table that lists all samples and controls and their caracteristics. Accepted file extensions: .txt, .tsv, .tab."),
+                    tags$li("a 'PCR plates design' file: a tab-separated file that represents the PCR plates design. Accepted file extensions: .txt, .tsv, .tab."),
                   )
                   ),
                   h3("Files structure"),
                   p("Each file must meet specific requirements to create correct ngsfilter files."),
-                  h4("Comments"),
-                  p("Celui-ci possède toutes les informations des échantillons et doit faire appel aux mêmes règles que pour le nommage des échantillons (pas d’accents, espace ou caractère spéciaux). Plusieurs colonnes sont utiles :"),
+                  h4("Samples and controls description"),
+                  p("This file lists the IDs of each individual PCR replicate, including controls, included in the experiment, as well as basic characteristics. Three columns are mandatory:"),
                   tags$div(tags$ul(
-                    tags$li("'id' : colonne avec le nom des échantillons ;"),
-                    tags$li("'type' : 'sample' pour les échantillons et 'control' pour les contrôles ;"),
-                    tags$li("'control_type' : elle peut prendre 4 valeurs différentes pour les contrôles ('extraction', 'pcr', 'sequencing', 'positive' ; pour plus d'informations ", a(href = 'https://metabarfactory.github.io/metabaR/articles/metabaRF-vignette.html', 'visitez cette page', .noWS = "outside"),"). Cette colonne ne doit pas être complétée pour les échantillons.", .noWS = c("after-begin", "before-end"))
+                    tags$li("'id': column with sample or control IDs. These IDs MUST BE UNIQUE and MUST NOT contain special characters, accents or spaces."),
+                    tags$li("'type': 'sample' for PCR replicates corresponding to samples and 'control' for experimental controls."),
+                    tags$li("'control_type': it can take 4 different values for controls ('extraction' for blank extraction controls, 'pcr' for blank PCR controls, 'sequencing' for blank sequencing controls, 'positive' for positive controls (e.g. mock communities)). For more information ", a(href = 'https://metabarfactory.github.io/metabaR/articles/metabaRF-vignette.html', 'visit this page', .noWS = "outside"),"). This column must not be completed for samples.", .noWS = c("after-begin", "before-end"))
                   ),
+                  p("Other columns may be added. Their name and content MUST NOT contain special characters, accents or spaces."),
                   h4("PCR plates design"),
+                  p("This file corresponds to the PCR plates design, showing the sample identity amplified in each well of PCR plates. The current internal design allows for the treatment of up to 12 plates per design. If there exist tag combinations of used forward and reverse tags that were not attributed to samples or controls, unused wells must be indicated by a specific keyword of your choice and will be annotated as sequencing controls in the ngsfilter file ('control_type' attribute). This obligation may disappear in future versions of the app. The keyword MUST NOT contain special characters, accents or spaces."),
                   h4("Tags plates design"),
+                  p("This file indicates the tag combination used in each well of each PCR plates.If there exist tag combinations of used forward and reverse tags that were not attributed to samples or controls, these combinations must be included in the file. This obligation may disappear in future versions of the app."),
                   h3("Example files"),
-                  p("Add examples files to download here")
+                  p("Coming soon")
                   
                   )
           ),
           ## tab: check_files ----
           tabItem(tabName = "check_files",
                   fluidRow(
-                    box(title = "Comments", width = 3, status = "primary",
+                    box(title = "Samples description", width = 3, status = "primary",
                         fileInput(inputId = "comments", label = "", accept = c(".txt", ".tsv", ".tab"), buttonLabel = icon("arrow-up-from-bracket")),
                         actionButton("submit1", "Check"),
                         br(),
