@@ -36,8 +36,8 @@ MakeNGSfilter::MakeNGSfilter()
 
 Three files are necessary to produce a ngsfilter file:
 
-- a 'samples and controls description' file: a tab-separated table that lists all samples and controls and their caracteristics. Accepted file extensions: .txt, .tsv, .tab.
-- a 'PCR plates design' file: a tab-separated file that represents the PCR plates design. Accepted file extensions: .txt, .tsv, .tab.
+- a 'samples and controls description' file: a tab-separated or .xlsx file that lists all samples and controls and their characteristics. Accepted file extensions: .txt, .tsv, .tab, .xlsx.
+- a 'PCR plates design' file: a tab-separated or .xlsx file that represents the PCR plates design. Accepted file extensions: .txt, .tsv, .tab, .xlsx.
 - a 'tags plates design' file: a .xlsx file that represents the distribution of sample tags in the PCR plates context.
 
 ### Files structure
@@ -61,4 +61,8 @@ This file corresponds to the PCR plates design, showing the sample identity ampl
 #### Tags plates design
 
 This file indicates the tag combination used in each well of each PCR plates.If there exist tag combinations of used forward and reverse tags that were not attributed to samples or controls, these combinations must be included in the file. This obligation may disappear in future versions of the app.
+
+#### Example files
+
+Example files can be found in the `data` folder of the GitHub repository.
 
