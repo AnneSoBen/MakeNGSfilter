@@ -1,0 +1,97 @@
+id	type	control_type
+S1_a	sample	
+S1_b	sample	
+S1_c	sample	
+S2_a	sample	
+S2_b	sample	
+S2_c	sample	
+S3_a	sample	
+S3_b	sample	
+S3_c	sample	
+S4_a	sample	
+S4_b	sample	
+S4_c	sample	
+S5_a	sample	
+S5_b	sample	
+S5_c	sample	
+S6_a	sample	
+S6_b	sample	
+S6_c	sample	
+S7_a	sample	
+S7_b	sample	
+S7_c	sample	
+S8_a	sample	
+S8_b	sample	
+S8_c	sample	
+S9_a	sample	
+S9_b	sample	
+S9_c	sample	
+S10_a	sample	
+S10_b	sample	
+S10_c	sample	
+S11_a	sample	
+S11_b	sample	
+S11_c	sample	
+S12_a	sample	
+S12_b	sample	
+S12_c	sample	
+S13_a	sample	
+S13_b	sample	
+S13_c	sample	
+S14_a	sample	
+S14_b	sample	
+S14_c	sample	
+S15_a	sample	
+S15_b	sample	
+S15_c	sample	
+S16_a	sample	
+S16_b	sample	
+S16_c	sample	
+S17_a	sample	
+S17_b	sample	
+S17_c	sample	
+S18_a	sample	
+S18_b	sample	
+S18_c	sample	
+S19_a	sample	
+S19_b	sample	
+S19_c	sample	
+S20_a	sample	
+S20_b	sample	
+S20_c	sample	
+S21_a	sample	
+S21_b	sample	
+S21_c	sample	
+S22_a	sample	
+S22_b	sample	
+S22_c	sample	
+S23_a	sample	
+S23_b	sample	
+S23_c	sample	
+S24_a	sample	
+S24_b	sample	
+S24_c	sample	
+S25_a	sample	
+S25_b	sample	
+S25_c	sample	
+S26_a	sample	
+S26_b	sample	
+S26_c	sample	
+S27_a	sample	
+S27_b	sample	
+S27_c	sample	
+BLK01	control	sequencing
+BLK02	control	sequencing
+BLK03	control	sequencing
+BLK04	control	sequencing
+BLK05	control	sequencing
+BLK06	control	sequencing
+BLK07	control	sequencing
+BLK08	control	sequencing
+Textr1	control	extraction
+Textr2	control	extraction
+Textr3	control	extraction
+Tpcr1	control	pcr
+Tpcr2	control	pcr
+Tpos1	control	positive
+Tpos2	control	positive

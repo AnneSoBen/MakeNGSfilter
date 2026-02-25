@@ -1,0 +1,8 @@
+BLK01	S1_a	S1_b	S1_c	S2_a	S2_b	S2_c	S3_a	S3_b	S3_c	S4_a	S4_b
+S4_c	BLK02	S5_a	S5_b	S5_c	S6_a	S6_b	S6_c	S7_a	S7_b	S7_c	S8_a
+S8_b	S8_c	BLK03	S9_a	S9_b	S9_c	S10_a	S10_b	S10_c	S11_a	S11_b	S11_c
+S12_a	S12_b	S12_c	BLK04	S13_a	S13_b	S13_c	S14_a	S14_b	S14_c	S15_a	S15_b
+S15_c	S16_a	S16_b	S16_c	BLK05	S17_a	S17_b	S17_c	S18_a	S18_b	S18_c	Tpcr1
+S19_a	S19_b	S19_c	S20_a	S20_b	BLK06	S20_c	S21_a	S21_b	S21_c	Tpcr2	S27_c
+S22_a	S22_b	S22_c	S23_a	S23_b	S23_c	BLK07	S24_a	S24_b	Textr1	S24_c	Tpos2
+S25_a	S25_b	S25_c	S26_a	S26_b	S26_c	S27_a	BLK08	Textr2	S27_b	Tpos1	Textr3
