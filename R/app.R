@@ -58,8 +58,9 @@ MakeNGSfilter <- function(){
                   h3("Mandatory files"),
                   p("Three files are necessary to produce a ngsfilter file:"),
                   tags$div(tags$ul(
-                    tags$li("a 'samples and controls description' file: a tab-separated table that lists all samples and controls and their caracteristics. Accepted file extensions: .txt, .tsv, .tab."),
-                    tags$li("a 'PCR plates design' file: a tab-separated file that represents the PCR plates design. Accepted file extensions: .txt, .tsv, .tab."),
+                    tags$li("a 'samples and controls description' file: a tab-separated table that lists all samples and controls and their caracteristics. Accepted file extensions: .txt, .tsv, .tab, .xlsx."),
+                    tags$li("a 'PCR plates design' file: a tab-separated file that represents the samples and controls in the PCR plates design. Accepted file extensions: .txt, .tsv, .tab, .xlsx."),
+                    tags$li("a 'tag plates design' file: a tab-separated file that represents the tags in the PCR plates design. Accepted file extension: .xlsx."),
                   )
                   ),
                   h3("Files structure"),
@@ -74,10 +75,10 @@ MakeNGSfilter <- function(){
                   p("Other columns may be added. Their name and content MUST NOT contain special characters, accents or spaces."),
                   h4("PCR plates design"),
                   p("This file corresponds to the PCR plates design, showing the sample identity amplified in each well of PCR plates. The current internal design allows for the treatment of up to 12 plates per design. If there exist tag combinations of used forward and reverse tags that were not attributed to samples or controls, unused wells must be indicated by a specific keyword of your choice and will be annotated as sequencing controls in the ngsfilter file ('control_type' attribute). This obligation may disappear in future versions of the app. The keyword MUST NOT contain special characters, accents or spaces."),
-                  h4("Tags plates design"),
+                  h4("Tag plates design"),
                   p("This file indicates the tag combination used in each well of each PCR plates.If there exist tag combinations of used forward and reverse tags that were not attributed to samples or controls, these combinations must be included in the file. This obligation may disappear in future versions of the app."),
                   h3("Example files"),
-                  p("Coming soon")
+                  p("Example files can be found in the data folder of the GitHub repository.")
                   
                   )
           ),
@@ -85,14 +86,14 @@ MakeNGSfilter <- function(){
           tabItem(tabName = "check_files",
                   fluidRow(
                     box(title = "Samples description", width = 3, status = "primary",
-                        fileInput(inputId = "comments", label = "", accept = c(".txt", ".tsv", ".tab"), buttonLabel = icon("arrow-up-from-bracket")),
+                        fileInput(inputId = "comments", label = "", accept = c(".txt", ".tsv", ".tab", ".xlsx"), buttonLabel = icon("arrow-up-from-bracket")),
                         actionButton("submit1", "Check"),
                         br(),
                         br(),
                         htmlOutput("text1")
                     ),
                     box(title = "Plate design", width = 3, status = "primary",
-                        fileInput(inputId = "platedesign", label = "", accept = c(".txt", ".tsv", ".tab"), buttonLabel = icon("arrow-up-from-bracket")),
+                        fileInput(inputId = "platedesign", label = "", accept = c(".txt", ".tsv", ".tab", ".xlsx"), buttonLabel = icon("arrow-up-from-bracket")),
                         textInput(inputId = "unused_well", label = p("Word designating unused wells:"), value = ""),
                         actionButton("submit2", "Check"),
                         br(),
@@ -123,7 +124,8 @@ MakeNGSfilter <- function(){
                            #uiOutput("new"),
                            textInput(inputId = "fwd_primer", label = "Forward primer sequence:", value = ""),
                            textInput(inputId = "rev_primer", label = "Reverse primer sequence:", value = ""),
-                           textInput(inputId = "to_add", label = "(Optional) short character string to add at the end of samples/controls names:", value = ""),
+                           textInput(inputId = "to_add", label = "(Optional) If replicates are on different libraries, short character string to add at the end of samples/controls names:", value = ""),
+                           textInput(inputId = "to_remove", label = " (Optional) If replicates are in the same library, length of the suffix added at the end of the sample names to discriminate replicates:", value = ""),
                            textInput(inputId = "output_file_name", label = "Output file name:", value = "ngsfilter.tab"),
                            actionButton("make_ngsfilter", "Make ngsfilter file"),
                            br(),
@@ -132,7 +134,9 @@ MakeNGSfilter <- function(){
                            htmlOutput("text6"),
                            br(),
                            br(),
-                           downloadButton("downloadData", "Download")
+                           downloadButton("downloadData", "Download"),
+                           br(),
+                           br()
                     ),
                     column(width = 9,
                            tableOutput("table")
@@ -177,11 +181,16 @@ MakeNGSfilter <- function(){
         
         ext <- tools::file_ext(file1$datapath)
         validate(
-          need(ext %in% c("txt", "tsv", "tab"),
-               "Please upload a txt, tsv or tab file")
+          need(ext %in% c("txt", "tsv", "tab", "xlsx"),
+               "Please upload a txt, tsv, tab or xlsx file")
         )
         
-        comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        if (ext != "xlsx") {
+          comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        }
+        else {
+          comments = readxl::read_xlsx(file1$datapath)
+        }
         
         names_ok = c("id", "type", "control_type")
         e1 = all(grepl("^[A-Za-z0-9\\_\\.-]+$", colnames(comments)))
@@ -279,11 +288,16 @@ MakeNGSfilter <- function(){
         
         ext <- tools::file_ext(file2$datapath)
         validate(
-          need(expr = ext %in% c("txt", "tsv", "tab"),
-               message = "Please upload a txt, tsv or tab file")
+          need(expr = ext %in% c("txt", "tsv", "tab", "xlsx"),
+               message = "Please upload a txt, tsv, tab or xlsx file")
         )
         
-        platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        if (ext != "xlsx") {
+          platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        }
+        else {
+          platedesign = readxl::read_xlsx(file2$datapath, col_names = FALSE)
+        }
         
         validate(
           need(expr = str_length(input$unused_well) > 0,
@@ -385,15 +399,40 @@ MakeNGSfilter <- function(){
           need(comments_ok() & platedesign_ok() & tags_ok(), "All files must be uploaded and pass all checks.")
         )
         
-        comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        # read comments file
+        ext <- tools::file_ext(file1$datapath)
+        validate(
+          need(ext %in% c("txt", "tsv", "tab", "xlsx"),
+               "Please upload a txt, tsv, tab or xlsx file")
+        )
         
-        platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        if (ext != "xlsx") {
+          comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        }
+        else {
+          comments = readxl::read_xlsx(file1$datapath)
+        }
         
+        # read plates design
+        ext <- tools::file_ext(file2$datapath)
+        validate(
+          need(expr = ext %in% c("txt", "tsv", "tab", "xlsx"),
+               message = "Please upload a txt, tsv, tab or xlsx file")
+        )
+        
+        if (ext != "xlsx") {
+          platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+        }
+        else {
+          platedesign = readxl::read_xlsx(file2$datapath, col_names = FALSE)
+        }
+
+        # read tags design
         tags <- readxl::read_xlsx(file3$datapath)
         tags <- as.data.frame(tags)
         rownames(tags) <- tags[,1]
         tags[,1] <- NULL
-        
+
         unused = input$unused_well
         
         # check if sample and control names correspond
@@ -510,16 +549,40 @@ MakeNGSfilter <- function(){
         
       })
       
-      
       output$downloadData <- downloadHandler(
         
         filename = input$output_file_name,
         
         content = function(file) {
-          comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+          # read comments file
+          ext <- tools::file_ext(file1$datapath)
+          validate(
+            need(ext %in% c("txt", "tsv", "tab", "xlsx"),
+                 "Please upload a txt, tsv, tab or xlsx file")
+          )
           
-          platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+          if (ext != "xlsx") {
+            comments = read.table(file = file1$datapath, sep = "\t", header = T, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+          }
+          else {
+            comments = readxl::read_xlsx(file1$datapath)
+          }
           
+          # read plates design
+          ext <- tools::file_ext(file2$datapath)
+          validate(
+            need(expr = ext %in% c("txt", "tsv", "tab", "xlsx"),
+                 message = "Please upload a txt, tsv, tab or xlsx file")
+          )
+          
+          if (ext != "xlsx") {
+            platedesign = read.table(file = file2$datapath, sep = "\t", header = F, stringsAsFactors = F, na.strings = "", check.names = FALSE)
+          }
+          else {
+            platedesign = readxl::read_xlsx(file2$datapath, col_names = FALSE)
+          }
+          
+          # read tags design
           tags <- readxl::read_xlsx(file3$datapath)
           tags <- as.data.frame(tags)
           rownames(tags) <- tags[,1]
@@ -530,6 +593,12 @@ MakeNGSfilter <- function(){
           # if(input$to_add == ""){
           #   print("bla")
             toadd = input$to_add
+            if(input$to_remove == "") {
+              toremove = 0
+            }
+            else {
+              toremove = as.numeric(input$to_remove)
+            }
           # }
           
           
@@ -619,19 +688,15 @@ MakeNGSfilter <- function(){
           # }
           
           #ID = comments$id
+            print(comments)
           
           comments_ngs = NULL
           for (i in 1:length(ID)){
-            if("sample_id" %in% colnames(comments)){
-              comments_ngs = c(comments_ngs, paste("id=", ID[i], ";", sep = ""))
+            if(comments[comments$id == substring(ID[i], 1, nchar(ID[i])-nchar(toadd)), "type"] == "sample") {
+              comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", substring(ID[i], 1, nchar(ID[i])-nchar(toadd)-toremove), ";", sep = ""))
             }
-            else{
-              # if(exists("toadd")){
-                comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", substring(ID[i], 1, nchar(ID[i])-nchar(toadd)), ";", sep = ""))
-              # }
-              # else{
-              #   comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", ID[i], ";", sep = ""))
-              # }
+            else {
+              comments_ngs = c(comments_ngs, paste("id=", ID[i], ";sample_id=", substring(ID[i], 1, nchar(ID[i])-nchar(toadd)), ";", sep = ""))
             }
             
             for (j in 2:ncol(comments)){
